@@ -54,7 +54,7 @@ const CONFIG = {
   // 首页标题栏背景滚动水印文字（大字循环动画）
   ENDSPACE_BANNER_WATERMARK_TEXT: 'SHENGBEIWANG.COM',
   // 文章详情页右上角水印文字
-  ENDSPACE_ARTICLE_WATERMARK_TEXT: 'SHENGBEIWANG',
+  ENDSPACE_ARTICLE_WATERMARK_TEXT: '圣杯网',
 
   // ============================================
   // 菜单配置 (Menu)
