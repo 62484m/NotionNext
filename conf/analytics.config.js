@@ -27,6 +27,9 @@ module.exports = {
   SEO_GOOGLE_SITE_VERIFICATION:
     process.env.NEXT_PUBLIC_SEO_GOOGLE_SITE_VERIFICATION || '', // Remove the value or replace it with your own google site verification code
 
+  SEO_BING_SITE_VERIFICATION:
+    process.env.NEXT_PUBLIC_SEO_BING_SITE_VERIFICATION || '',
+
   SEO_BAIDU_SITE_VERIFICATION:
     process.env.NEXT_PUBLIC_SEO_BAIDU_SITE_VERIFICATION || '', // Remove the value or replace it with your own google site verification code
 
