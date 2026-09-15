@@ -88,6 +88,12 @@ const SEO = props => {
     NOTION_CONFIG
   )
 
+  const SEO_BING_SITE_VERIFICATION = siteConfig('SEO_BING_SITE_VERIFICATION', '', NOTION_CONFIG)
+  const noindex = Boolean(
+    router.route?.startsWith('/search') || router.route === '/404' ||
+    post?.password || (post?.status && post.status !== 'Published')
+  )
+
   const BLOG_FAVICON = siteConfig('BLOG_FAVICON', null, NOTION_CONFIG)
   const pwaEnabled = siteConfig('PWA_ENABLE', false, NOTION_CONFIG)
   const pwaConfig = pwaEnabled
@@ -133,7 +139,7 @@ const SEO = props => {
         name='viewport'
         content='width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0'
       />
-      <meta name='robots' content='follow, index, max-snippet:-1, max-image-preview:large, max-video-preview:-1' />
+      <meta name='robots' content={noindex ? 'noindex, follow' : 'follow, index, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
       <meta charSet='UTF-8' />
       <meta name='format-detection' content='telephone=no' />
       <meta name='mobile-web-app-capable' content='yes' />
@@ -149,6 +155,9 @@ const SEO = props => {
       )}
 
       {/* 搜索引擎验证 */}
+      {SEO_BING_SITE_VERIFICATION && (
+        <meta name='msvalidate.01' content={SEO_BING_SITE_VERIFICATION} />
+      )}
       {SEO_GOOGLE_SITE_VERIFICATION && (
         <meta
           name='google-site-verification'
