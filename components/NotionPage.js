@@ -6,9 +6,69 @@ import { isBrowser, loadExternalResource } from '@/lib/utils'
 import mediumZoom from '@fisch0920/medium-zoom'
 import 'katex/dist/katex.min.css'
 import dynamic from 'next/dynamic'
+import { getBlockValue } from 'notion-utils'
 import { useEffect, useRef } from 'react'
 import { NotionRenderer } from 'react-notion-x'
 import OriginalityProof from './OriginalityProof'
+
+const IMAGE_LINK_FRAGMENT = '#notion-image-link='
+
+function getImageHyperlink(block) {
+  if (block?.type !== 'image') return null
+  return normalizeImageHyperlink(block.format?.image_hyperlink)
+}
+
+function normalizeImageHyperlink(value) {
+  if (typeof value !== 'string') return null
+  const href = value.trim()
+  if (/^\/(?![\\/])|^#/.test(href)) return href
+
+  try {
+    const { protocol } = new URL(href)
+    return ['https:', 'http:', 'mailto:', 'tel:'].includes(protocol) ? href : null
+  } catch {
+    return null
+  }
+}
+
+function mapArticleImageUrl(source, block) {
+  const src = mapImgUrl(source, block)
+  const href = getImageHyperlink(block)
+  return src && href ? src + IMAGE_LINK_FRAGMENT + encodeURIComponent(href) : src
+}
+
+function ArticleImage({ src, alt, className, style, width, height, priority, onLoad }) {
+  const markerIndex = src?.lastIndexOf(IMAGE_LINK_FRAGMENT) ?? -1
+  let href = null
+  if (markerIndex >= 0) {
+    try {
+      href = normalizeImageHyperlink(decodeURIComponent(src.slice(markerIndex + IMAGE_LINK_FRAGMENT.length)))
+    } catch {
+      // An ordinary image source can contain an arbitrary fragment.
+    }
+  }
+  const image = (
+    <img
+      src={href ? src.slice(0, markerIndex) : src}
+      alt={alt}
+      className={className}
+      style={style}
+      width={width}
+      height={height}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding='async'
+      onLoad={href ? undefined : onLoad}
+    />
+  )
+
+  if (!href) return image
+
+  return (
+    <a className='notion-link block' href={href}>
+      {image}
+    </a>
+  )
+}
 
 /**
  * 整个站点的核心组件
@@ -17,6 +77,9 @@ import OriginalityProof from './OriginalityProof'
  * @returns
  */
 const NotionPage = ({ post, className }) => {
+  const hasLinkedImages = Object.values(post?.blockMap?.block || {}).some(
+    entry => getImageHyperlink(getBlockValue(entry))
+  )
   // 是否关闭数据库和画册的点击跳转
   const POST_DISABLE_GALLERY_CLICK = siteConfig('POST_DISABLE_GALLERY_CLICK')
   const POST_DISABLE_DATABASE_CLICK = siteConfig('POST_DISABLE_DATABASE_CLICK')
@@ -118,12 +181,14 @@ const NotionPage = ({ post, className }) => {
       <NotionRenderer
         recordMap={post?.blockMap}
         mapPageUrl={mapPageUrl}
-        mapImageUrl={mapImgUrl}
+        mapImageUrl={hasLinkedImages ? mapArticleImageUrl : mapImgUrl}
+        forceCustomImages={hasLinkedImages}
         components={{
           Code,
           Collection,
           Embed: NotionEmbed,
           Equation,
+          Image: hasLinkedImages ? ArticleImage : undefined,
           Link: NotionLink,
           Modal,
           Pdf,
