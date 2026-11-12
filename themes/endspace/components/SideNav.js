@@ -184,14 +184,14 @@ export const SideNav = (props) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Avatar Section - Top of sidebar, clickable to personal page */}
+      {/* Avatar Section - Top of sidebar, links to the homepage */}
       {/* Fixed height container to prevent layout shift when expanded */}
       <div className="flex-shrink-0 h-[10rem] py-6 flex flex-col items-center">
-        <SmartLink href="/aboutme" title="Profile">
+        <SmartLink href="/" title="返回首页">
           <div className="w-[3rem] h-[3rem] flex-shrink-0 transition-transform duration-300 cursor-pointer hover:scale-105">
             <img 
               src={avatarUrl}
-              alt="Avatar"
+              alt="返回首页"
               className="w-full h-full rounded-full object-cover shadow-lg transition-colors"
             />
           </div>
