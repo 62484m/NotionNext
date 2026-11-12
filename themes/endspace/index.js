@@ -168,9 +168,6 @@ const LayoutIndex = (props) => {
     <>
       {hasBanner && (
         <div id="endspace-home-ad" className="mb-6">
-          <div className="mb-1 text-right text-xs text-[var(--endspace-text-muted)]">
-            广告
-          </div>
           <a
             className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
             href={link.trim()}
