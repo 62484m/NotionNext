@@ -8,6 +8,7 @@ import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import { isBrowser } from '@/lib/utils'
 import { Transition } from '@headlessui/react'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
 import BlogListArchive from './components/BlogListArchive'
@@ -156,7 +157,40 @@ const LayoutBase = (props) => {
  * @returns
  */
 const LayoutIndex = (props) => {
-  return <LayoutPostList {...props} />
+  const { NOTION_CONFIG = {} } = props
+  const image = NOTION_CONFIG.ENDSPACE_HOME_AD_IMAGE
+  const link = NOTION_CONFIG.ENDSPACE_HOME_AD_LINK
+  const hasBanner = [image, link].every(
+    value => typeof value === 'string' && /^https:\/\/[^\s/]+/i.test(value.trim())
+  )
+
+  return (
+    <>
+      {hasBanner && (
+        <div id="endspace-home-ad" className="mb-6">
+          <div className="mb-1 text-right text-xs text-[var(--endspace-text-muted)]">
+            广告
+          </div>
+          <a
+            className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+            href={link.trim()}
+            rel="sponsored"
+          >
+            <Image
+              src={image.trim()}
+              alt="查看首页优惠活动"
+              width={2000}
+              height={667}
+              className="block h-auto w-full"
+              loading="eager"
+              unoptimized
+            />
+          </a>
+        </div>
+      )}
+      <LayoutPostList {...props} />
+    </>
+  )
 }
 
 /**
