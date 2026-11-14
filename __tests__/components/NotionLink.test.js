@@ -4,6 +4,12 @@ import NotionLink, {
 } from '@/components/NotionLink'
 
 describe('NotionLink', () => {
+  it('qualifies the existing Taobao campaign link without rewriting its destination', () => {
+    render(<NotionLink href='https://s.tb.cn/c.0xr0s3'>优惠券</NotionLink>)
+    const link = screen.getByRole('link')
+    expect(link).toHaveAttribute('href', 'https://s.tb.cn/c.0xr0s3')
+    expect(link).toHaveAttribute('rel', expect.stringContaining('sponsored'))
+  })
   it('opens external http links in a new tab', () => {
     render(<NotionLink href='https://example.com'>Example</NotionLink>)
 

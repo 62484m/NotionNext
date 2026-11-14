@@ -114,7 +114,10 @@ export async function getStaticProps(req) {
       await generateRss(props)
     }
     // 生成
-    generateSitemapXml(props)
+    // Server deployments use the live route; a public file shadows it with stale data.
+    if (process.env.EXPORT === 'true') {
+      generateSitemapXml(props)
+    }
     // 检查数据是否需要从algolia删除
     await checkDataFromAlgolia(props)
     if (siteConfig('UUID_REDIRECT', false, props?.NOTION_CONFIG)) {

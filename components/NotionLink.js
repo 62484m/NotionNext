@@ -1,3 +1,11 @@
+const isPromotionLink = href => {
+  try {
+    const url = new URL(href)
+    return ['http:', 'https:'].includes(url.protocol) &&
+      ['taobao.com', 'tmall.com', 'tb.cn'].some(host => url.hostname === host || url.hostname.endsWith(`.${host}`))
+  } catch { return false }
+}
+
 const EXTERNAL_HTTP_LINK = /^https?:\/\//i
 
 const mergeRelValues = (...values) => {
@@ -48,8 +56,8 @@ const NotionLink = ({ href, target, rel, ...props }) => {
   const shouldOpenInNewTab = shouldOpenNotionLinkInNewTab(href, target)
   const normalizedTarget = shouldOpenInNewTab ? '_blank' : target
   const normalizedRel = shouldOpenInNewTab
-    ? mergeRelValues(rel, 'noopener noreferrer')
-    : rel
+    ? mergeRelValues(rel, 'noopener noreferrer', isPromotionLink(href) && 'sponsored')
+    : mergeRelValues(rel, isPromotionLink(href) && 'sponsored')
 
   return (
     <a {...props} href={href} target={normalizedTarget} rel={normalizedRel} />

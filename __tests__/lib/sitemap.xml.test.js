@@ -26,14 +26,17 @@ describe('generateSitemapXml', () => {
       allPages: [
         {
           slug: '/hello-world',
+          status: 'Published', type: 'Post',
           publishDay: '2026-02-20'
         },
         {
           slug: 'https://external.com/landing',
+          status: 'Published', type: 'Menu',
           publishDay: '2026-02-20'
         },
         {
           slug: 'https://example.com/internal/page',
+          status: 'Published', type: 'Menu',
           publishDay: 'invalid-date'
         }
       ]
@@ -43,7 +46,7 @@ describe('generateSitemapXml', () => {
 
     const xml = writeSpy.mock.calls[0][1]
     expect(xml).toContain('<loc>https://example.com/hello-world</loc>')
-    expect(xml).toContain('<loc>https://example.com/internal/page</loc>')
+    expect(xml).not.toContain('<loc>https://example.com/internal/page</loc>')
     expect(xml).not.toContain('<loc>https://external.com/landing</loc>')
     expect(xml).not.toContain('https://example.com/https://external.com/landing')
     expect(xml).not.toContain('Invalid Date')
