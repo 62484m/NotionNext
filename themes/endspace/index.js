@@ -90,8 +90,8 @@ const LayoutBase = (props) => {
         />
       )}
 
-      {/* Loading animation */}
-      {LOADING_COVER && <LoadingCover />}
+      {/* Article content arrives with the page data and can be used immediately. */}
+      {LOADING_COVER && !post && <LoadingCover />}
 
       {/* Left vertical navigation (desktop) */}
       <SideNav {...props} />
