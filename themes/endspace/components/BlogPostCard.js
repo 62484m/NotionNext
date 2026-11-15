@@ -10,17 +10,19 @@ import { IconArrowRight } from '@tabler/icons-react'
 export const BlogPostCard = ({ post, showSummary = true }) => {
   const showPreview = siteConfig('ENDSPACE_POST_LIST_PREVIEW', true, CONFIG)
   const showCover = siteConfig('ENDSPACE_POST_LIST_COVER', true, CONFIG)
-  const hasCover = showCover && post.pageCoverThumbnail
+  const cover = post.pageCoverThumbnail === 'https://www.notion.so/images/page-cover/texturelabs_metal_212S.jpg'
+    ? '/images/texturelabs-metal-212s-card.webp'
+    : post.pageCoverThumbnail
 
   return (
     <SmartLink href={`/${post.slug}`}>
       <article className={`endspace-frame group mb-6 flex flex-col overflow-hidden relative transition-all duration-300`}>
         
         {/* Cover Image - Top (Full Width) */}
-        {hasCover && (
+        {showCover && cover && (
           <div className="w-full aspect-video flex-shrink-0 relative overflow-hidden z-10 bg-black/5">
             <img
-              src={post.pageCoverThumbnail}
+              src={cover}
               alt={post.title}
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
