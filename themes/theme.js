@@ -14,6 +14,15 @@ const LayoutLoading = () => (
   <div className='min-h-screen w-full bg-[#f6f6f1] dark:bg-black' />
 )
 
+// Register both Endspace article layouts before Next.js preloads them for SSR.
+const EndspaceBaseLayout = dynamic(
+  () => import('@/themes/endspace').then(theme => theme.LayoutBase)
+)
+const EndspaceArticleLayout = dynamic(
+  () => import('@/themes/endspace').then(theme => theme.LayoutSlug),
+  { loading: LayoutLoading }
+)
+
 const EmptyBaseLayout = ({ children }) => <>{children}</>
 const EmptyPageLayout = () => null
 
@@ -191,6 +200,8 @@ const getCurrentTheme = (router, fallbackTheme) => {
  */
 export const getBaseLayoutByTheme = theme => {
   const normalizedTheme = normalizeThemeName(theme)
+  if (normalizedTheme === 'endspace') return EndspaceBaseLayout
+
   if (baseLayoutCache.has(normalizedTheme)) {
     return baseLayoutCache.get(normalizedTheme)
   }
@@ -222,10 +233,15 @@ export const DynamicLayout = props => {
 export const useLayoutByTheme = ({ layoutName, theme }) => {
   const router = useRouter()
   const themeQuery = getCurrentTheme(router, theme)
+  scheduleFixThemeDOM(themeQuery === BLOG.THEME ? 80 : 240)
+
+  if (themeQuery === 'endspace' && layoutName === 'LayoutSlug') {
+    return EndspaceArticleLayout
+  }
+
   const cacheKey = `${themeQuery}:${layoutName}`
 
   if (layoutByThemeCache.has(cacheKey)) {
-    scheduleFixThemeDOM(themeQuery === BLOG.THEME ? 80 : 240)
     return layoutByThemeCache.get(cacheKey)
   }
 
@@ -236,7 +252,6 @@ export const useLayoutByTheme = ({ layoutName, theme }) => {
     loading: getLayoutLoading(layoutName)
   })
   layoutByThemeCache.set(cacheKey, DynamicLayoutComponent)
-  scheduleFixThemeDOM(themeQuery === BLOG.THEME ? 80 : 240)
   return DynamicLayoutComponent
 }
 

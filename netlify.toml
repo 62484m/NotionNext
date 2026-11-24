@@ -7,3 +7,51 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/article/672e9d8a-dbf7-82d1-9f13-015a47a5c951"
+  to = "/article/how-to-use"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/article/1e3e9d8a-dbf7-82d5-a1ed-817a78c5b9eb"
+  to = "/article/youhui"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/article/e56e9d8a-dbf7-82a3-84da-81fbd9db51d7"
+  to = "/article/runhua"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/article/3f5e9d8a-dbf7-8378-8c00-0154a75514b1"
+  to = "/article/example-6"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/article/d91e9d8a-dbf7-83fb-9b4c-01ae1e77a368"
+  to = "/article/how-to-pick"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/article/ad6e9d8a-dbf7-8391-bfd6-815f4164cf1b"
+  to = "/article/example-10"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/article/418e9d8a-dbf7-817d-b0e2-f0925ff8944e"
+  to = "/article/ok-three-hip-models"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/article/418e9d8a-dbf7-8184-aea9-f7760949b5f6"
+  to = "/article/ok-chuanxin-pengke-review"
+  status = 301
+  force = true

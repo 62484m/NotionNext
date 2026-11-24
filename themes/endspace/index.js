@@ -1,5 +1,7 @@
 'use client'
 
+import { COUPON_GIF } from '@/components/couponImages'
+
 import Comment from '@/components/Comment'
 import NotionPage from '@/components/NotionPage'
 import ShareBar from '@/components/ShareBar'
@@ -174,7 +176,7 @@ const LayoutIndex = (props) => {
             rel="sponsored"
           >
             <Image
-              src={image.trim()}
+              src={link.trim() === 'https://s.tb.cn/c.0xr0s3' ? COUPON_GIF : image.trim()}
               alt="查看首页优惠活动"
               width={2000}
               height={667}
